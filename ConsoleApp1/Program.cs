@@ -50,8 +50,10 @@ namespace ConsoleApp1
                         GetEnteredKey(Console.ReadKey());
                         if (key == 'y')
                         {
+                            // TODO: modularize
                             printer.Value(Environment.NewLine + "How many jokes do you want? (1-9)").ToString();
                             int n = Int32.Parse(Console.ReadLine());
+                            // TODO: handle boundary case
                             printer.Value("Enter a category;").ToString();
                             GetRandomJokes(Console.ReadLine(), n);
                             PrintResults();
@@ -60,6 +62,7 @@ namespace ConsoleApp1
                         {
                             printer.Value(Environment.NewLine + "How many jokes do you want? (1-9)").ToString();
                             int n = Int32.Parse(Console.ReadLine());
+                            // handle boundary case
                             GetRandomJokes(null, n);
                             PrintResults();
                         }
@@ -72,7 +75,11 @@ namespace ConsoleApp1
 
         private static void PrintResults()
         {
-            printer.Value("[" + string.Join(",", results) + "]").ToString();
+            for(int i = 0; i < results.Length; i++)
+            {
+                printer.Value("[" + string.Join(",", results[i]) + "]").ToString();
+            }
+            //printer.Value("[" + string.Join(",", results) + "]").ToString();
         }
 
         private static void GetEnteredKey(ConsoleKeyInfo consoleKeyInfo)
