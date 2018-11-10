@@ -43,8 +43,12 @@ namespace ConsoleApp1
                         }
                         else
                         {
-                            // TODO: custom name
-                        }
+                            printer.Value(Environment.NewLine + "Enter the name you want to use.").ToString();
+                            string s = Console.ReadLine();
+                            string firstName = s.Substring(0, s.LastIndexOf(' '));
+                            string lastName = s.Substring(s.LastIndexOf(' ') + 1);
+                            name = Tuple.Create(firstName, lastName);
+                        }                        
                             
                         printer.Value(Environment.NewLine + "Want to specify a category? y/n").ToString();
                         GetEnteredKey(Console.ReadKey());
@@ -79,7 +83,6 @@ namespace ConsoleApp1
             {
                 printer.Value("[" + string.Join(",", results[i]) + "]").ToString();
             }
-            //printer.Value("[" + string.Join(",", results) + "]").ToString();
         }
 
         private static void GetEnteredKey(ConsoleKeyInfo consoleKeyInfo)
