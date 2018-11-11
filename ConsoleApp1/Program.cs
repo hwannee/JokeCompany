@@ -50,14 +50,15 @@ namespace ConsoleApp1
                             name = Tuple.Create(firstName, lastName);
                         }                        
                             
-                        printer.Value(Environment.NewLine + "Want to specify a category? y/n").ToString();
+                        printer.Value("Want to specify a category? y/n").ToString();
                         GetEnteredKey(Console.ReadKey());
                         if (key == 'y')
                         {
                             // TODO: modularize
-                            printer.Value(Environment.NewLine + "How many jokes do you want? (1-9)").ToString();
+                            printer.Value(Environment.NewLine + "How many jokes do you want? (1-9)cccc").ToString();
                             int n = Int32.Parse(Console.ReadLine());
                             // TODO: handle boundary case
+                            // TODO: fix category
                             printer.Value("Enter a category;").ToString();
                             GetRandomJokes(Console.ReadLine(), n);
                             PrintResults();
