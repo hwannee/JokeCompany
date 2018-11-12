@@ -1,3 +1,0 @@
-JsonFeed.cs
-Getnames() --> GetNames(): PascalCase
-getCategories() --> GeCategories(): naming convention
