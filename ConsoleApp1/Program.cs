@@ -129,10 +129,7 @@ namespace ConsoleApp1
                     break;
                 case ConsoleKey.Y:
                     key = 'y';
-                    break;
-                case ConsoleKey.N:
-                    key = 'n';
-                    break;
+                    break;                
                 case ConsoleKey.H:
                     key = 'h';
                     break;
