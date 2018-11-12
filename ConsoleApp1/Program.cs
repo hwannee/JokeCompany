@@ -54,13 +54,27 @@ namespace ConsoleApp1
                         GetEnteredKey(Console.ReadKey());
                         if (key == 'y')
                         {
+                            printer.Value("Enter a category; 0(all), 1(explicit), 2(nerdy)").ToString();
+                            // input category
+                            GetEnteredKey(Console.ReadKey());
+                            //int category = Int32.Parse(key.ToString());
+                            string s = "";
+                            if (key == '1')
+                            {
+                                s = "explicit";
+                            } 
+                            else if(key == '2')
+                            {
+                                s = "nerdy";
+                            }
+
                             // TODO: modularize
-                            printer.Value(Environment.NewLine + "How many jokes do you want? (1-9)cccc").ToString();
+                            printer.Value(Environment.NewLine + "How many jokes do you want? (1-9)").ToString();
                             int n = Int32.Parse(Console.ReadLine());
                             // TODO: handle boundary case
-                            // TODO: fix category
-                            printer.Value("Enter a category;").ToString();
-                            GetRandomJokes(Console.ReadLine(), n);
+
+                            //GetRandomJokes(Console.ReadLine(), n);
+                            GetRandomJokes(s, n);
                             PrintResults();
                         }
                         else 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -16,7 +15,7 @@ namespace ConsoleApp1
         public JsonFeed(string endpoint, int results)
         {
             _url = endpoint;
-            _results = results;
+            _results = results; // update _result to get the number of jokes
         }
 
         public static string[] GetRandomJokes(string firstname, string lastname, string category)
@@ -55,14 +54,16 @@ namespace ConsoleApp1
                         url += "&";
                     else url += "?";
                     url += "limitTo=[";
+                    //url += "categories=[";
                     url += category;
                     url += "]";
                 }
-                
+
                 jokes[i] = Task.FromResult(client.GetStringAsync(url).Result).Result;
+                // if id is invalid, repeat the for loop(revert index i, pick up new random id)
                 if (jokes[i].Contains("Exception"))
                 {
-                    //Console.WriteLine(String.Format("Invalid id({0}). Repeating...", id));
+                    //Console.WriteLine(String.Format("Invalid id({0}). Repeating...", id)); // debug
                     i--;
                 }
             }
