@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -22,64 +23,47 @@ namespace ConsoleApp1
         {
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(_url);
-            string url;
-            int id;
-            string[] jokes = new string[_results];
-                        
-            for (int i = 0; i<_results; i++)
+            string url = "jokes?";
+            
+            if (firstname != null)
             {
-                url = "jokes/";
-                id = _random.Next(5, 604);
-                url += id.ToString();
-                
-                if (firstname != null)
-                {
-                    if (url.Contains('?'))
-                        url += "&";
-                    else url += "?";
-                    url += "firstName=";
-                    url += firstname.ToString();
-                }
-                if (lastname != null)
-                {
-                    if (url.Contains('?'))
-                        url += "&";
-                    else url += "?";
-                    url += "lastName=";
-                    url += lastname.ToString();
-                }
-                if (category != null)
-                {
-                    if (url.Contains('?'))
-                        url += "&";
-                    else url += "?";
-                    url += "limitTo=[";
-                    //url += "categories=[";
-                    url += category;
-                    url += "]";
-                }
-
-                jokes[i] = Task.FromResult(client.GetStringAsync(url).Result).Result;
-                // if id is invalid, repeat the for loop(revert index i, pick up new random id)
-                if (jokes[i].Contains("Exception"))
-                {
-                    //Console.WriteLine(String.Format("Invalid id({0}). Repeating...", id)); // debug
-                    i--;
-                }
+                if (url.Contains('?'))
+                    url += "&";
+                else url += "?";
+                url += "firstName=";
+                url += firstname.ToString();
             }
-			return jokes;
-		}
-
-        private static int randomId(int min, int max)
-        {
-            Random random = new Random(Guid.NewGuid().GetHashCode());
-            int n = random.Next();
-            Console.WriteLine(n);
-            n = n % max + 1;
-            Console.WriteLine(n);
-            return n;
+            if (lastname != null)
+            {
+                if (url.Contains('?'))
+                    url += "&";
+                else url += "?";
+                url += "lastName=";
+                url += lastname.ToString();
+            }
+            if (category != null)
+            {
+                if (url.Contains('?'))
+                    url += "&";
+                else url += "?";
+                url += "limitTo=[";
+                url += category;
+                url += "]";
+            }
+            // Extract all data at once to avoid retrial for invalid id or categories.
+            string str = Task.FromResult(client.GetStringAsync(url).Result).Result;
+            dynamic obj = JsonConvert.DeserializeObject<dynamic>(str);
+            // Random choose number of jokes and add to results string.            
+            string[] results = new string[_results];
+            for (int i = 0; i < _results; i++)
+            {
+                int randomIndex = _random.Next(0, obj.value.Count);
+                string result = obj.value[randomIndex].joke;                
+                results[i] = result;
+            }
+            return results;
         }
-
+        
         /// <summary>
         /// returns an object that contains name and surname
         /// </summary>
@@ -98,7 +82,16 @@ namespace ConsoleApp1
 			HttpClient client = new HttpClient();
 			client.BaseAddress = new Uri(_url);
 
-			return new string[] { Task.FromResult(result: client.GetStringAsync("categories").Result).Result };
+            string str = Task.FromResult(client.GetStringAsync("categories").Result).Result;
+            dynamic obj = JsonConvert.DeserializeObject<dynamic>(str);
+            string[] results = new string[obj.value.Count];
+            for (int i = 0; i < obj.value.Count; i++)
+            {
+                results[i] = obj.value[i];
+            }
+
+            //return new string[] { Task.FromResult(result: client.GetStringAsync("categories").Result).Result };
+            return results;
 		}
     }
 }

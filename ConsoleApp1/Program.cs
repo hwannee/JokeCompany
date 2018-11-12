@@ -30,6 +30,7 @@ namespace ConsoleApp1
                     if (key == 'c')
                     {
                         GetCategories();
+                        Console.WriteLine();
                         PrintResults();
                     }
                     if (key == 'r')
@@ -43,37 +44,27 @@ namespace ConsoleApp1
                         }
                         else
                         {
-                            printer.Value(Environment.NewLine + "Enter the name you want to use.").ToString();
-                            string s = Console.ReadLine();
-                            string firstName = s.Substring(0, s.LastIndexOf(' '));
-                            string lastName = s.Substring(s.LastIndexOf(' ') + 1);
-                            name = Tuple.Create(firstName, lastName);
+                            printer.Value(Environment.NewLine + "Want to use a custom name? y/n").ToString();
+                            GetEnteredKey(Console.ReadKey());
+                            if (key == 'y')
+                            {
+                                printer.Value(Environment.NewLine + "Enter the name you want to use.").ToString();
+                                string s = Console.ReadLine();
+                                string firstName = s.Substring(0, s.LastIndexOf(' '));
+                                string lastName = s.Substring(s.LastIndexOf(' ') + 1);
+                                name = Tuple.Create(firstName, lastName);
+                            }
                         }                        
-                            
-                        printer.Value("Want to specify a category? y/n").ToString();
+                        
+                        printer.Value(Environment.NewLine + "Want to specify a category? y/n").ToString();
                         GetEnteredKey(Console.ReadKey());
                         if (key == 'y')
                         {
-                            printer.Value("Enter a category; 0(all), 1(explicit), 2(nerdy)").ToString();
+                            printer.Value(Environment.NewLine + "Enter a category").ToString();
                             // input category
-                            GetEnteredKey(Console.ReadKey());
-                            //int category = Int32.Parse(key.ToString());
-                            string s = "";
-                            if (key == '1')
-                            {
-                                s = "explicit";
-                            } 
-                            else if(key == '2')
-                            {
-                                s = "nerdy";
-                            }
-
-                            // TODO: modularize
+                            string s = Console.ReadLine();
                             printer.Value(Environment.NewLine + "How many jokes do you want? (1-9)").ToString();
                             int n = Int32.Parse(Console.ReadLine());
-                            // TODO: handle boundary case
-
-                            //GetRandomJokes(Console.ReadLine(), n);
                             GetRandomJokes(s, n);
                             PrintResults();
                         }
@@ -81,7 +72,6 @@ namespace ConsoleApp1
                         {
                             printer.Value(Environment.NewLine + "How many jokes do you want? (1-9)").ToString();
                             int n = Int32.Parse(Console.ReadLine());
-                            // handle boundary case
                             GetRandomJokes(null, n);
                             PrintResults();
                         }
@@ -96,7 +86,7 @@ namespace ConsoleApp1
         {
             for(int i = 0; i < results.Length; i++)
             {
-                printer.Value("[" + string.Join(",", results[i]) + "]").ToString();
+                printer.Value(results[i]).ToString();
             }
         }
 
